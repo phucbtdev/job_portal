@@ -41,11 +41,11 @@ class AccountController extends Controller
             ]);
         }
     }
-    
+
     public function login(){
         return view('clients.accounts.login');
     }
-    
+
     public function authenticate(Request $request){
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
@@ -58,7 +58,7 @@ class AccountController extends Controller
             }else {
                 return redirect()->route('account.login')->withInput($request->only('email'))->with('error', 'Email or password is incorrect!');
             }
-        }else{  
+        }else{
             return redirect()->route('account.login')
             ->withErrors($validator)
             ->withInput($request->only('email'));
@@ -66,7 +66,43 @@ class AccountController extends Controller
     }
 
     public function profile(){
-        return view('clients.accounts.profile');
+        $id = Auth::user()->id;
+
+        // $user = User::find($id);
+        $user = User::where('id', $id)->first();
+
+        return view('clients.accounts.profile',[
+            'user'=> $user
+        ]);
+    }
+
+    public function updateProfile(Request $request){
+        $id = Auth::user()->id;
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:5|max:20',
+            'email' => 'required|email|unique:users,email,'.$id.',id',
+        ]);
+
+        if ($validator->passes()) {
+            $user = User::find($id);
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->designation = $request->designation;
+            $user->mobile = $request->mobile;
+            $user->save();
+
+            session()->flash('success', 'Update profile successfully!');
+
+            return response()->json([
+                'status' => true,
+                'errors' => []
+            ]);
+        }else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
     }
 
     public function logout(){
