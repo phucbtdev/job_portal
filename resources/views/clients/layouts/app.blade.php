@@ -62,10 +62,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form action="" id="avatarForm" name="avatarForm" method="post">
                         <div class="mb-3">
                             <label for="exampleInputEmail1" class="form-label">Profile Image</label>
                             <input type="file" class="form-control" id="image" name="image">
+                            <p class="text-danger" id="errorImage"></p>
                         </div>
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary mx-3">Update</button>
@@ -98,6 +99,31 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+        $("#avatarForm").submit(function(e) {
+            e.preventDefault();
+
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: '{{ route('account.updateAvatar') }}',
+                type: 'post',
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    if (response.status == false) {
+                        var error = response.errors;
+                        if (error.image) {
+                            $("#errorImage").html(error.image);
+                        }
+                    } else {
+                        window.location.href = '{{ url()->current() }}'
+                    }
+                }
+            })
+        })
     </script>
 
     @yield('customJs')

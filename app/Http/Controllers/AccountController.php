@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class AccountController extends Controller
 {
@@ -104,6 +108,45 @@ class AccountController extends Controller
             ]);
         }
     }
+
+    public function updateAvatar(Request $request){
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|image',
+        ]);
+        $id = Auth::user()->id;
+        if ($validator->passes()) {
+            $image = $request->image;
+            $ext = $image->getClientOriginalExtension();
+            $imageName = $id . time() . '-' . $ext;
+            $image->move(public_path("/profile_pic/"), $imageName);
+
+            //Create small thumbnail
+            $sourcePath = public_path('/profile_pic/'.$imageName);
+            $manager = new ImageManager(Driver::class);
+            $image = $manager->read($sourcePath);
+
+            $image->cover(150, 150);
+            $image->toPng()->save(public_path("/profile_pic/thumb/".$imageName));
+
+            File::delete(public_path("/profile_pic/thumb/" . Auth::user()->image));
+            File::delete(public_path("/profile_pic/" . Auth::user()->image));
+
+            User::where('id', $id)->update(['image' => $imageName]);
+
+            session()->flash('success', 'Profile picture update successfully!');
+
+            return response()->json([
+                'status' => true,
+                'errors' => []
+            ]);
+        }else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+    }
+
 
     public function logout(){
         Auth::logout();

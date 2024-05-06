@@ -30,6 +30,7 @@ Route::group(['account'], function (){
         Route::get('/account/profile', [AccountController::class, 'profile'])->name('account.profile');
         Route::get('/account/logout', [AccountController::class, 'logout'])->name('account.logout');
         Route::put('/account/updateProfile', [AccountController::class, 'updateProfile'])->name('account.updateProfile');
+        Route::post('/account/updateAvatar', [AccountController::class, 'updateAvatar'])->name('account.updateAvatar');
 
     });
 });
