@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class AccountController extends Controller
 {
@@ -44,4 +45,33 @@ class AccountController extends Controller
     public function login(){
         return view('clients.accounts.login');
     }
+    
+    public function authenticate(Request $request){
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if($validator->passes()){
+            if (Auth::attempt(['email'=> $request->email, 'password' => $request->password])) {
+                return redirect()->route('account.profile');
+            }else {
+                return redirect()->route('account.login')->withInput($request->only('email'))->with('error', 'Email or password is incorrect!');
+            }
+        }else{  
+            return redirect()->route('account.login')
+            ->withErrors($validator)
+            ->withInput($request->only('email'));
+        }
+    }
+
+    public function profile(){
+        return view('clients.accounts.profile');
+    }
+
+    public function logout(){
+        Auth::logout();
+        return redirect()->route('account.login');
+    }
+
 }
