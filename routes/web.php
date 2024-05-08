@@ -18,19 +18,20 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
-Route::group(['account'], function (){
+Route::group(['prefix'=> 'account'], function (){
     Route::group(['middleware' => 'guest'], function (){
-        Route::get('/account/registration', [AccountController::class, 'registration'])->name('account.registration');
-        Route::post('/account/register', [AccountController::class, 'register'])->name('account.register');
-        Route::get('/account/login', [AccountController::class, 'login'])->name('account.login');
-        Route::post('/account/authenticate', [AccountController::class, 'authenticate'])->name('account.authenticate');
+        Route::get('/register', [AccountController::class, 'registration'])->name('account.registration');
+        Route::post('/process-register', [AccountController::class, 'register'])->name('account.register');
+        Route::get('/login', [AccountController::class, 'login'])->name('account.login');
+        Route::post('/authenticate', [AccountController::class, 'authenticate'])->name('account.authenticate');
     });
 
     Route::group(['middleware' => 'auth'], function (){
-        Route::get('/account/profile', [AccountController::class, 'profile'])->name('account.profile');
-        Route::get('/account/logout', [AccountController::class, 'logout'])->name('account.logout');
-        Route::put('/account/updateProfile', [AccountController::class, 'updateProfile'])->name('account.updateProfile');
-        Route::post('/account/updateAvatar', [AccountController::class, 'updateAvatar'])->name('account.updateAvatar');
+        Route::get('/profile', [AccountController::class, 'profile'])->name('account.profile');
+        Route::get('/logout', [AccountController::class, 'logout'])->name('account.logout');
+        Route::put('/update-profile', [AccountController::class, 'updateProfile'])->name('account.updateProfile');
+        Route::post('/update-avatar', [AccountController::class, 'updateAvatar'])->name('account.updateAvatar');
+        Route::get('/create-job', [AccountController::class, 'createJob'])->name('account.createJob');
 
     });
 });
