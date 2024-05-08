@@ -94,7 +94,7 @@
                                                                         href="{{ route('account.editJob', $job->id) }}"><i
                                                                             class="fa fa-edit" aria-hidden="true"></i>
                                                                         Edit</a></li>
-                                                                <li><a class="dropdown-item" href="#"><i
+                                                                <li><a class="dropdown-item"  onclick="deleteJob({{$job->id}})" href="#"><i
                                                                             class="fa fa-trash" aria-hidden="true"></i>
                                                                         Remove</a></li>
                                                             </ul>
@@ -120,141 +120,18 @@
 
 @section('customJs')
     <script type="text/javascript">
-        $("#createJobForm").submit(function(e) {
-            e.preventDefault();
-            $.ajax({
-                url: '{{ route('account.saveJob') }}',
-                type: 'post',
-                dataType: 'json',
-                data: $("#createJobForm").serializeArray(),
-                success: function(response) {
-                    if (response.status == true) {
-                        $("#title").removeClass('is-invalid')
-                            .siblings('p')
-                            .removeClass('invalid-feedback')
-                            .html('')
-
-                        $("#category").removeClass('is-invalid')
-                            .siblings('p')
-                            .removeClass('invalid-feedback')
-                            .html('')
-
-                        $("#jobType").removeClass('is-invalid')
-                            .siblings('p')
-                            .removeClass('invalid-feedback')
-                            .html('')
-
-                        $("#vacancy").removeClass('is-invalid')
-                            .siblings('p')
-                            .removeClass('invalid-feedback')
-                            .html('')
-
-                        $("#location").removeClass('is-invalid')
-                            .siblings('p')
-                            .removeClass('invalid-feedback')
-                            .html('')
-
-                        $("#description").removeClass('is-invalid')
-                            .siblings('p')
-                            .removeClass('invalid-feedback')
-                            .html('')
-
-                        $("#company_name").removeClass('is-invalid')
-                            .siblings('p')
-                            .removeClass('invalid-feedback')
-                            .html('')
-
-                        window.location.href = '{{ route('account.profile') }}';
-                    } else {
-                        var errors = response.errors;
-
-                        if (errors.title) {
-                            $("#title").addClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feedback')
-                                .html(errors.title)
-                        } else {
-                            $("#title").removeClass('is-invalid')
-                                .siblings('p')
-                                .removeClass('invalid-feedback')
-                                .html('')
-                        }
-
-                        if (errors.category) {
-                            $("#category").addClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feedback')
-                                .html(errors.category)
-                        } else {
-                            $("#category").removeClass('is-invalid')
-                                .siblings('p')
-                                .removeClass('invalid-feedback')
-                                .html('')
-                        }
-
-                        if (errors.jobType) {
-                            $("#jobType").addClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feedback')
-                                .html(errors.jobType)
-                        } else {
-                            $("#jobType").removeClass('is-invalid')
-                                .siblings('p')
-                                .removeClass('invalid-feedback')
-                                .html('')
-                        }
-
-                        if (errors.vacancy) {
-                            $("#vacancy").addClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feedback')
-                                .html(errors.vacancy)
-                        } else {
-                            $("#vacancy").removeClass('is-invalid')
-                                .siblings('p')
-                                .removeClass('invalid-feedback')
-                                .html('')
-                        }
-
-                        if (errors.location) {
-                            $("#location").addClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feedback')
-                                .html(errors.location)
-                        } else {
-                            $("#location").removeClass('is-invalid')
-                                .siblings('p')
-                                .removeClass('invalid-feedback')
-                                .html('')
-                        }
-
-                        if (errors.description) {
-                            $("#description").addClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feedback')
-                                .html(errors.description)
-                        } else {
-                            $("#description").removeClass('is-invalid')
-                                .siblings('p')
-                                .removeClass('invalid-feedback')
-                                .html('')
-                        }
-
-                        if (errors.company_name) {
-                            $("#company_name").addClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feedback')
-                                .html(errors.company_name)
-                        } else {
-                            $("#company_name").removeClass('is-invalid')
-                                .siblings('p')
-                                .removeClass('invalid-feedback')
-                                .html('')
-                        }
+        function deleteJob(id){
+            if (confirm("Are you sure you want to delete?")){
+                $.ajax({
+                    url: '{{route("account.removeJob")}}',
+                    type: 'post',
+                    data: {jobId: id },
+                    dataType: 'json',
+                    success: function (response){
+                        window.location.href = '{{route('account.myJob')}}';
                     }
-                }
-            });
-
-        });
+                })
+            }
+        }
     </script>
 @endsection
