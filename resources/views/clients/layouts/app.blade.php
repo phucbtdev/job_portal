@@ -33,7 +33,7 @@
                             <a class="nav-link" aria-current="page" href="{{route('home')}}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="jobs.html">Find Jobs</a>
+                            <a class="nav-link" aria-current="page" href="{{route('jobs')}}">Find Jobs</a>
                         </li>
                     </ul>
 
@@ -45,7 +45,7 @@
                             type="submit">Account</a>
                     @endif
 
-                    <a class="btn btn-primary" href="post-job.html" type="submit">Post a Job</a>
+                    <a class="btn btn-primary" href="{{route('account.createJob')}}" type="submit">Post a Job</a>
                 </div>
             </div>
         </nav>
@@ -72,7 +72,6 @@
                             <button type="submit" class="btn btn-primary mx-3">Update</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
-
                     </form>
                 </div>
             </div>
