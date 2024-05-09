@@ -150,7 +150,6 @@ class AccountController extends Controller
         }
     }
 
-
     public function logout(){
         Auth::logout();
         return redirect()->route('account.login');
@@ -211,7 +210,7 @@ class AccountController extends Controller
 
     public function listJobs()
     {
-        $jobs = Job::where('user_id', Auth::user()->id)->with('jobType')->paginate(3);
+        $jobs = Job::where('user_id', Auth::user()->id)->with('jobType')->orderby('created_at' ,'DESC')->paginate(3);
         return view('clients.accounts.job.my-jobs',[
             'jobs' => $jobs
         ]);
