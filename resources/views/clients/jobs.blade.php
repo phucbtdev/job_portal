@@ -23,12 +23,12 @@
                         <div class="card border-0 shadow p-4">
                             <div class="mb-4">
                                 <h2>Keywords</h2>
-                                <input value="{{Request::get('keyword')}}" type="text" name="keyword" placeholder="Keywords" class="form-control">
+                                <input value="{{ Request::get('keyword')  }}" type="text" name="keyword" id="keyword" placeholder="Keywords" class="form-control">
                             </div>
 
                             <div class="mb-4">
                                 <h2>Location</h2>
-                                <input value="{{Request::get('location')}}" type="text" name="location" placeholder="Location" class="form-control">
+                                <input value="{{Request::get('location')}}" type="text" name="location" id="location" placeholder="Location" class="form-control">
                             </div>
 
                             <div class="mb-4">
@@ -72,8 +72,8 @@
                                     <option {{Request::get('experience') == '10_plus' ? 'selected' : ''}}  value="10_plus">10+ Years</option>
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-primary">Search</button>
-                            <a href="{{route('jobs')}}">Reset</a>
+                            <button type="submit" class="btn btn-primary mb-3">Search</button>
+                            <a href="{{route('jobs')}}" class="btn btn-dark">Reset</a>
                         </div>
                     </form>
                 </div>
@@ -97,6 +97,19 @@
                                                             <span class="fw-bolder"><i class="fa fa-clock-o" style="width: 10px"></i></span>
                                                             <span class="ps-1">{{ $job->jobType->name}}</span>
                                                         </p>
+                                                        <p class="mb-0">
+                                                            <span class="fw-bolder"><i class="fa fa-map-marker" style="width: 10px"></i></span>
+                                                            <span class="ps-1">{{ $job->experience}} years</span>
+                                                        </p>
+                                                        <p class="mb-0">
+                                                            <span class="fw-bolder"><i class="fa fa-map-marker" style="width: 10px"></i></span>
+                                                            <span class="ps-1">{{ $job->jobType->name}}</span>
+                                                        </p>
+                                                        <p class="mb-0">
+                                                            <span class="fw-bolder"><i class="fa fa-map-marker" style="width: 10px"></i></span>
+                                                            <span class="ps-1">{{ $job->category->name}}</span>
+                                                        </p>
+
                                                         @if(!is_null($job->salary))
                                                             <p class="mb-0">
                                                                 <span class="fw-bolder"><i class="fa fa-usd" style="width: 10px"></i></span>
@@ -138,11 +151,11 @@
             var keyword = $('#keyword').val();
             var location = $('#location').val();
             var category = $('#category').val();
+            var experience = $('#experience').val();
+            var sort = $('#sort').val();
             var checkedJobTypes = $("input:checkbox[name='job_type']:checked").map(function (){
                 return $(this).val();
-            });
-
-            var sort = $('#sort').val();
+            }).get();
 
             if (keyword != "" ){
                 url += '&keyword='+keyword;
@@ -156,13 +169,14 @@
                 url += '&category='+category;
             }
 
-            if (category != "" ){
-                url += '&category='+category;
+            if (experience != "" ){
+                url += '&experience='+experience;
             }
 
             if (checkedJobTypes.length >0){
                 url += '&jobType='+checkedJobTypes;
             }
+
             url += '&sort='+sort;
 
             window.location.href = url;

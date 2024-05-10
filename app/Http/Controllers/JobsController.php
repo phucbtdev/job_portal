@@ -19,8 +19,8 @@ class JobsController extends Controller
         //Keyword
         if (!empty($request->keyword)){
             $jobs = $jobs->where(function ($query) use($request){
-               $query->orWhere('title','like','%'.$request->title.'%');
-                $query->orWhere('keywords','like','%'.$request->keyword.'%');
+               $query->orWhere('title','like','%'.$request->keyword.'%');
+               $query->orWhere('keywords','like','%'.$request->keyword.'%');
             });
         }
 
@@ -30,13 +30,17 @@ class JobsController extends Controller
         }
 
         if (!empty($request->category)){
-            $jobs = $jobs->where('category','like','%'.$request->category.'%');
+            $jobs = $jobs->where('category_id','like','%'.$request->category.'%');
+        }
+
+        if (!empty($request->experience)){
+            $jobs = $jobs->where('experience','like','%'.$request->experience.'%');
         }
 
         $jobTypeArray = [];
         if (!empty($request->jobType)){
-            $jobTypeArray = implode(',',$request->jobType );
-            $jobs = $jobs->whereIn('job_type_id',$jobTypes);
+            $jobTypeArray = explode(',', $request->jobType );
+            $jobs = $jobs->whereIn('job_type_id',$jobTypeArray);
         }
 
         if ($request->sort == '1'){
