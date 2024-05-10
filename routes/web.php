@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/jobs', [JobsController::class, 'index'])->name('jobs');
+Route::get('/jobs/job-detail/{id}', [JobsController::class, 'jobDetail'])->name('jobDetail');
 
 
 Route::group(['prefix'=> 'account'], function (){

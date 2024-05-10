@@ -57,4 +57,18 @@ class JobsController extends Controller
             'jobTypeArray'=>$jobTypeArray
         ]);
     }
+
+    public function jobDetail($id){
+        $jobDetail = Job::where([
+            'id'=>$id,
+            'status'=>'1'
+        ])->first();
+
+        if (is_null($jobDetail)){
+            abort(404);
+        }
+        return view('clients.jobDetail',[
+            'jobDetail' =>$jobDetail
+        ]);
+    }
 }
