@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Job;
+use App\Models\JobApplication;
 use App\Models\JobType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class JobsController extends Controller
 {
@@ -69,6 +71,52 @@ class JobsController extends Controller
         }
         return view('clients.jobDetail',[
             'jobDetail' =>$jobDetail
+        ]);
+    }
+
+    public function applyJob(Request $request){
+        $id = $request->id;
+        $job = Job::where('id',$id)->first();
+
+        if ( $job == null){
+            session()->flash('error',"Jod does not exist.");
+            return response()->json([
+                'status' => false,
+                'message'=> "Jod does not exist."
+            ]);
+        }
+
+        $employer_id = $job->user_id;
+        if ( $employer_id  == Auth::user()->id){
+            session()->flash('error',"You can not apply in your own job.");
+            return response()->json([
+                'status' => false,
+                'message'=> "You can not apply in your own job."
+            ]);
+        }
+
+        $jobApplied = JobApplication::where([
+            'job_id'=> $id,
+            'user_id'=> Auth::user()->id
+        ])->count();
+        if ( $jobApplied > 0){
+            session()->flash('error',"You already applied on this job.");
+            return response()->json([
+                'status' => false,
+                'message'=> "You already applied on this job."
+            ]);
+        }
+
+        $application = new JobApplication();
+        $application->job_id = $id;
+        $application->user_id = Auth::user()->id;
+        $application->employer_id = $employer_id;
+        $application->applied_date = now();
+        $application->save();
+        session()->flash('success',"You have successfully applied.");
+        return response()->json([
+            'status' => true,
+            'message'=> "You have successfully applied."
         ]);
     }
 }
