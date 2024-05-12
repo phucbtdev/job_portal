@@ -53,7 +53,7 @@
                                                     </div>
                                                 </td>
                                                 <td>{{ \Carbon\Carbon::parse($jobApplication->applied_date)->format('d M, Y') }}</td>
-                                                <td>130 Applications</td>
+                                                <td>{{ $jobApplication->job->jobApplication->count() }} Applications</td>
                                                 <td>
                                                     @if ($jobApplication->job->status == 1)
                                                         <div class="job-status text-capitalize">Active</div>
@@ -68,14 +68,10 @@
                                                             <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                                                         </button>
                                                         <ul class="dropdown-menu dropdown-menu-end">
-                                                            <li><a class="dropdown-item" href="job-detail.html"> <i
+                                                            <li><a class="dropdown-item" href="{{ route('jobDetail',$jobApplication->job_id) }}"> <i
                                                                         class="fa fa-eye" aria-hidden="true"></i>
                                                                     View</a></li>
-                                                            <li><a class="dropdown-item"
-                                                                   href="{{ route('account.editJob', $jobApplication->id) }}"><i
-                                                                        class="fa fa-edit" aria-hidden="true"></i>
-                                                                    Edit</a></li>
-                                                            <li><a class="dropdown-item"  onclick="deleteJob({{$jobApplication->id}})" href="#"><i
+                                                            <li><a class="dropdown-item"  onclick="removeJob({{$jobApplication->id}})" href="#"><i
                                                                         class="fa fa-trash" aria-hidden="true"></i>
                                                                     Remove</a></li>
                                                         </ul>
@@ -101,15 +97,15 @@
 
 @section('customJs')
     <script type="text/javascript">
-        function deleteJob(id){
+        function removeJob(id){
             if (confirm("Are you sure you want to delete?")){
                 $.ajax({
                     url: '{{route("account.removeJob")}}',
                     type: 'post',
-                    data: {jobId: id },
+                    data: {id: id },
                     dataType: 'json',
                     success: function (response){
-                        window.location.href = '{{route('account.myJob')}}';
+                        window.location.href = '{{route('account.jobsApplied')}}';
                     }
                 })
             }
