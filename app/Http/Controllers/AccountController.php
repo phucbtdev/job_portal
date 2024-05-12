@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Job;
+use App\Models\JobApplication;
 use App\Models\JobType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -299,6 +300,15 @@ class AccountController extends Controller
         session()->flash('success', 'Job deleted successfully.');
         return response()->json([
             'status' => true
+        ]);
+    }
+
+    public function jobsApplied()
+    {
+        $jobApplications = JobApplication::where('user_id', Auth::user()->id)->with(['job','job.jobType'])->paginate(10);
+
+        return view('clients.accounts.job.jobs-applied',[
+            'jobApplications'=>$jobApplications
         ]);
     }
 }

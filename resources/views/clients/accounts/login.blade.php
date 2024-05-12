@@ -7,22 +7,7 @@
             <div class="row d-flex justify-content-center">
 
                 <div class="col-md-5">
-                    {{-- Alert successfully --}}
-                    @if (Session::has('success'))
-                        <div class="alert alert-success">
-                            <p class="mb-0">{{ Session::get('success') }}</p>
-                        </div>
-                    @endif
-                    {{-- End Alert --}}
-
-                    {{-- Alert login error --}}
-                    @if (Session::has('error'))
-                        <div class="alert alert-danger">
-                            <p class="mb-0">{{ Session::get('error') }}</p>
-                        </div>
-                    @endif
-                    {{-- End login error --}}
-
+                    @include('clients.messages')
                     <div class="card shadow border-0 p-5">
                         <h1 class="h3">Login</h1>
                         <form action="{{ route('account.authenticate') }}" method="post">
