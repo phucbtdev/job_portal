@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\JobNotificationEmail;
 use App\Models\Category;
 use App\Models\Job;
 use App\Models\JobApplication;
 use App\Models\JobType;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class JobsController extends Controller
 {
@@ -78,6 +81,7 @@ class JobsController extends Controller
         $id = $request->id;
         $job = Job::where('id',$id)->first();
 
+        //Check job's exist in database
         if ( $job == null){
             session()->flash('error',"Jod does not exist.");
             return response()->json([
@@ -86,6 +90,7 @@ class JobsController extends Controller
             ]);
         }
 
+        //You can not apply in your own job.
         $employer_id = $job->user_id;
         if ( $employer_id  == Auth::user()->id){
             session()->flash('error',"You can not apply in your own job.");
@@ -95,10 +100,12 @@ class JobsController extends Controller
             ]);
         }
 
+        //You can not apply on a job twise
         $jobApplied = JobApplication::where([
             'job_id'=> $id,
             'user_id'=> Auth::user()->id
         ])->count();
+
         if ( $jobApplied > 0){
             session()->flash('error',"You already applied on this job.");
             return response()->json([
@@ -113,6 +120,17 @@ class JobsController extends Controller
         $application->employer_id = $employer_id;
         $application->applied_date = now();
         $application->save();
+
+        //Send notifications to employer
+        $employer = User::where('id', $employer_id)->first();
+        $mailData = [
+            'employer' =>  $employer,
+            'user' => Auth::user(),
+            'job' => $job
+        ];
+
+        Mail::to($employer->email )->send(new JobNotificationEmail($mailData));
+
         session()->flash('success',"You have successfully applied.");
         return response()->json([
             'status' => true,

@@ -118,7 +118,7 @@
                                 @if(Auth::check())
                                     <button onclick="apply({{ $jobDetail->id }})" class="btn btn-primary">Apply</button>
                                 @else
-                                    <a href="javascript:void(0)" class="btn btn-secondary">Login to Apply</a>
+                                    <a href="javascript:void(0)" class="btn btn-primary">Login to Apply</a>
                                 @endif
                             </div>
                         </div>
