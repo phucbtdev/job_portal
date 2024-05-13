@@ -36,9 +36,13 @@
                                     </div>
                                 </div>
                                 <div class="jobs_right">
-                                    <div class="apply_now">
-                                        <a class="heart_mark" href="#"> <i class="fa fa-heart-o" aria-hidden="true"></i></a>
-                                    </div>
+                                    {{-- Icon save job--}}
+                                    @if(Auth::check())
+                                        <div class="apply_now">
+                                            <a class="heart_mark {{($jobSaveCount == 1) ? 'saved-job' : ''}}" onclick="saveJob({{ $jobDetail->id}})" href="javascript:void(0)"> <i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                                        </div>
+                                    @endif
+                                    {{-- End Icon save job--}}
                                 </div>
                             </div>
                         </div>
@@ -64,7 +68,6 @@
                                 </div>
                             @endif
 
-
                             @if(!empty($jobDetail->benefits))
                                 <div class="single_wrap">
                                     <h4>Benefits</h4>
@@ -74,7 +77,11 @@
 
                             <div class="border-bottom"></div>
                             <div class="pt-3 text-end">
-                                <a href="#" class="btn btn-secondary">Save</a>
+                                @if(Auth::check())
+                                    <a href="javascript:void(0)" onclick="saveJob({{ $jobDetail->id}})" class="btn btn-secondary">Save</a>
+                                @else
+                                    <a href="javascript:void(0)" class="btn btn-secondary">Login to Save</a>
+                                @endif
 
                                 @if(Auth::check())
                                     <button onclick="apply({{ $jobDetail->id }})" class="btn btn-primary">Apply</button>
@@ -140,6 +147,18 @@
                     }
                 })
             }
+        }
+
+        function saveJob(id){
+            $.ajax({
+                url: '{{ route('saveJob') }}',
+                type: 'post',
+                data:{id:id},
+                dataType: 'json',
+                success : function (){
+                    window.location.href = "{{ url()->current() }}";
+                }
+            })
         }
     </script>
 @endsection
