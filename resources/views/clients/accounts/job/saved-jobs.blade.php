@@ -20,12 +20,12 @@
                 <div class="col-lg-9">
                     @include('clients.messages')
 
-                    {{-- List job applied --}}
+                    {{-- Form create job --}}
                     <div class="card border-0 shadow mb-4 p-3">
                         <div class="card-body card-form">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <h3 class="fs-4 mb-1">Jobs Applied</h3>
+                                    <h3 class="fs-4 mb-1">Saved Jobs</h3>
                                 </div>
                             </div>
                             <div class="table-responsive">
@@ -33,25 +33,25 @@
                                     <thead class="bg-light">
                                     <tr>
                                         <th scope="col">Title</th>
-                                        <th scope="col">Date Applied</th>
+                                        <th scope="col">Date Saved</th>
                                         <th scope="col">Applicants</th>
                                         <th scope="col">Status</th>
                                         <th scope="col">Action</th>
                                     </tr>
                                     </thead>
                                     <tbody class="border-0">
-                                    @if ($jobApplications->isNotEmpty())
-                                        @foreach ($jobApplications as $jobApplication)
+                                    @if ($savedJobs->isNotEmpty())
+                                        @foreach ($savedJobs as $savedJob)
                                             <tr class="active">
                                                 <td>
-                                                    <div class="job-name fw-500">{{$jobApplication->job->title }}</div>
-                                                    <div class="info1">{{ $jobApplication->job->jobType->name }} . {{ $jobApplication->job->location }}
+                                                    <div class="job-name fw-500">{{ $savedJob->job->title }}</div>
+                                                    <div class="info1">{{ $savedJob->job->jobType->name }} . {{ $savedJob->job->location }}
                                                     </div>
                                                 </td>
-                                                <td>{{ \Carbon\Carbon::parse($jobApplication->applied_date)->format('d M, Y') }}</td>
-                                                <td>{{ $jobApplication->job->jobApplication->count() }} Applications</td>
+                                                <td>{{ \Carbon\Carbon::parse($savedJob->create_at)->format('d M, Y') }}</td>
+                                                <td>{{$savedJob->job->jobApplication->count()}} Applications</td>
                                                 <td>
-                                                    @if ($jobApplication->job->status == 1)
+                                                    @if ($savedJob->job->status == 1)
                                                         <div class="job-status text-capitalize">Active</div>
                                                     @else
                                                         <div class="job-status text-capitalize">Block</div>
@@ -64,10 +64,10 @@
                                                             <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                                                         </button>
                                                         <ul class="dropdown-menu dropdown-menu-end">
-                                                            <li><a class="dropdown-item" href="{{ route('jobDetail',$jobApplication->job_id) }}"> <i
+                                                            <li><a class="dropdown-item" href="{{ route('jobDetail',$savedJob->job_id) }}"> <i
                                                                         class="fa fa-eye" aria-hidden="true"></i>
                                                                     View</a></li>
-                                                            <li><a class="dropdown-item"  onclick="removeJob({{$jobApplication->id}})" href="#"><i
+                                                            <li><a class="dropdown-item"  onclick="removeSavedJob({{$savedJob->id}})" href="#"><i
                                                                         class="fa fa-trash" aria-hidden="true"></i>
                                                                     Remove</a></li>
                                                         </ul>
@@ -80,11 +80,11 @@
                                 </table>
                             </div>
                             <div>
-                                {{ $jobApplications->links() }}
+                                {{ $savedJobs->links() }}
                             </div>
                         </div>
                     </div>
-                    {{-- End list job applied  --}}
+                    {{-- End form create job --}}
                 </div>
             </div>
         </div>
@@ -93,15 +93,15 @@
 
 @section('customJs')
     <script type="text/javascript">
-        function removeJob(id){
+        function removeSavedJob(id){
             if (confirm("Are you sure you want to delete?")){
                 $.ajax({
-                    url: '{{route("account.removeJob")}}',
+                    url: '{{route("account.removeSavedJob")}}',
                     type: 'post',
                     data: {id: id },
                     dataType: 'json',
                     success: function (response){
-                        window.location.href = '{{route('account.jobsApplied')}}';
+                        window.location.href = '{{ url()->current() }}'
                     }
                 })
             }
