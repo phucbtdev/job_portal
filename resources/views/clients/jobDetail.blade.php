@@ -91,6 +91,45 @@
                             </div>
                         </div>
                     </div>
+                    @if(Auth::check())
+                        @if(Auth::user()->id == $jobDetail->user_id)
+                            <div class="card shadow border-0 mt-3">
+                                <div class="job_details_header">
+                                    <div class="single_jobs white-bg d-flex justify-content-between">
+                                        <div class="jobs_left d-flex align-items-center">
+                                            <div class="jobs_conetent">
+                                                <a href="#">
+                                                    <h4>Applicants</h4>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="descript_wrap white-bg">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tr>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Email</th>
+                                                <th scope="col">Mobile</th>
+                                                <th scope="col">Applied Date</th>
+                                            </tr>
+                                            @if($applicants->isNotEmpty())
+                                                @foreach($applicants as $applicant)
+                                                    <tr>
+                                                        <td>{{$applicant->user->name}}</td>
+                                                        <td>{{$applicant->user->email}}</td>
+                                                        <td>{{$applicant->user->mobile}}</td>
+                                                        <td>{{\Carbon\Carbon::parse($applicant->applied_date)->format('d M, Y')}}</td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @endif
                 </div>
                 <div class="col-md-4">
                     <div class="card shadow border-0">

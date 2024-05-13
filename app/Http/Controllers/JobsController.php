@@ -70,14 +70,21 @@ class JobsController extends Controller
             'status'=>'1'
         ])->first();
 
-        $jobSaveCount = SavedJob::where(['user_id'=>Auth::user()->id, 'job_id' => $id])->count();
-
         if (is_null($jobDetail)){
             abort(404);
         }
+
+        $jobSaveCount = 0;
+        if (Auth::user()){
+            $jobSaveCount = SavedJob::where(['user_id'=>Auth::user()->id, 'job_id' => $id])->count();
+
+        }
+
+        $applicants = JobApplication::where('job_id',$id)->with('user')->get();
         return view('clients.jobDetail',[
             'jobDetail' =>$jobDetail,
-            'jobSaveCount'=>$jobSaveCount
+            'jobSaveCount'=>$jobSaveCount,
+            'applicants' => $applicants
         ]);
     }
 
