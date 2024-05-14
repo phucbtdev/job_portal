@@ -198,7 +198,7 @@
                             .siblings('p')
                             .removeClass('invalid-feedback')
                             .html('')
-                        window.location.href = "{{ route('account.editJob', $job->id) }}";
+                        window.location.href = "{{ route('admin.editJob', $job->id) }}";
                     } else {
                         var errors = response.errors;
 

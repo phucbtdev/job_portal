@@ -91,7 +91,7 @@
         function removeJob(id){
             if (confirm("Are you sure you want to delete?")){
                 $.ajax({
-                    url: '{{route("account.removeJob")}}',
+                    url: '{{route("admin.removeJob")}}',
                     type: 'post',
                     data: {id: id },
                     dataType: 'json',
