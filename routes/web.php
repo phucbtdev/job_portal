@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\admin\DashboardController;
+use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobsController;
 use Illuminate\Support\Facades\Route;
@@ -49,4 +51,12 @@ Route::group(['prefix'=> 'account'], function (){
         Route::post('/change-password', [AccountController::class, 'changePassword'])->name('account.changePassword');
 
     });
+});
+
+Route::group(['prefix'=> 'admin','middleware' =>'checkRole'], function (){
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/list-user', [UserController::class, 'list'])->name('admin.list');
+    Route::get('/edit-user/{id}', [UserController::class, 'editUser'])->name('admin.editUser');
+    Route::put('/update-user', [UserController::class, 'updateUser'])->name('admin.updateUser');
+    Route::post('/remove-user', [UserController::class, 'removeUser'])->name('admin.removeUser');
 });
