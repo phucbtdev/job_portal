@@ -158,7 +158,7 @@
         $("#editForm").submit(function(e) {
             e.preventDefault();
             $.ajax({
-                url: '{{ route('account.updateJob', $job->id) }}',
+                url: '{{ route('admin.updateJob', $job->id) }}',
                 type: 'post',
                 dataType: 'json',
                 data: $("#editForm").serializeArray(),
