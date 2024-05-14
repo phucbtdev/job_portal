@@ -40,7 +40,7 @@
                                             <th scope="col">Job Created</th>
                                             <th scope="col">Applicants</th>
                                             <th scope="col">Status</th>
-                                            <th scope="col">Action</th>
+                                            <th scope="col" class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody class="border-0">
@@ -62,7 +62,7 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        <div class="action-dots float-end">
+                                                        <div class="action-dots text-center">
                                                             <button class="btn" data-bs-toggle="dropdown"
                                                                 aria-expanded="false">
                                                                 <i class="fa fa-ellipsis-v" aria-hidden="true"></i>

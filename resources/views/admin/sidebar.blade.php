@@ -8,7 +8,7 @@
                 <a href="{{ route('admin.list') }}">Users</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <a href="">Jobs</a>
+                <a href="{{ route('admin.listJob') }}">Jobs</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <a href=" ">Log out</a>

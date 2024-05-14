@@ -23,7 +23,7 @@
 
                         <form action="" id="userForm" name="userForm" method="post">
                             <div class="card-body  p-4">
-                                <h3 class="fs-4 mb-1">My Profile</h3>
+                                <h3 class="fs-4 mb-1">Information</h3>
                                 <div class="mb-4">
                                     <label for="" class="mb-2">Name*</label>
                                     <input type="text" name="name" id="name" placeholder="Enter Name"

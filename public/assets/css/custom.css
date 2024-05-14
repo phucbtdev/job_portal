@@ -5,3 +5,6 @@
  .trumbowyg-editor ul li {
      list-style: disc;
  }
+.pagination span{
+    font-size: inherit;
+}
