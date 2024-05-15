@@ -36,6 +36,7 @@
                                         <th scope="col">Created by</th>
                                         <th scope="col">Date</th>
                                         <th scope="col">Applicants</th>
+                                        <th scope="col">Status</th>
                                         <th scope="col" class="text-center">Action</th>
                                     </tr>
                                     </thead>
@@ -49,8 +50,15 @@
                                                     </div>
                                                 </td>
                                                 <td>{{ $job->user->name}}</td>
-                                                <td>{{ \Carbon\Carbon::parse($job->create_at)->format('d M, Y') }}</td>
-                                                <td>{{$job->jobApplication->count()}} Applications</td>
+                                                <td> <span class="badge rounded-pill bg-secondary"> {{ \Carbon\Carbon::parse($job->create_at)->format('d M, Y') }}</span></td>
+                                                <td>{{$job->jobApplication->count()}} Applications
+                                                <td>
+                                                    @if( $job->status === 1 )
+                                                        <span class="badge rounded-pill bg-success">Active</span>
+                                                    @else
+                                                        <span class="badge rounded-pill bg-danger">Block</span>
+                                                    @endif
+                                                </td>
                                                 <td>
                                                     <div class="action-dots text-center">
                                                         <button class="btn" data-bs-toggle="dropdown"
