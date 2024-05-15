@@ -11,6 +11,9 @@
                 <a href="{{ route('admin.listJob') }}">Jobs</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                <a href="{{ route('admin.listJobApplications') }}">Job Application</a>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <a href=" ">Log out</a>
             </li>
         </ul>

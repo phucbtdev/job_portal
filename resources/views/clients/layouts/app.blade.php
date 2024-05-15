@@ -70,7 +70,7 @@
                 <div class="modal-body">
                     <form action="" id="avatarForm" name="avatarForm" method="post">
                         <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">Profile Image</label>
+                            <label class="form-label">Profile Image</label>
                             <input type="file" class="form-control" id="image" name="image">
                             <p class="text-danger" id="errorImage"></p>
                         </div>

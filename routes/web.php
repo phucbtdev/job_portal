@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\admin\DashboardController;
+use App\Http\Controllers\admin\JobApplicationController;
 use App\Http\Controllers\admin\JobController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\HomeController;
@@ -26,12 +27,19 @@ Route::get('/jobs/job-detail/{id}', [JobsController::class, 'jobDetail'])->name(
 Route::post('/jobs/job-apply', [JobsController::class, 'applyJob'])->name('applyJob');
 Route::post('/jobs/save-job', [JobsController::class, 'saveJob'])->name('saveJob');
 
+
+
+
 Route::group(['prefix'=> 'account'], function (){
     Route::group(['middleware' => 'guest'], function (){
         Route::get('/register', [AccountController::class, 'registration'])->name('account.registration');
         Route::post('/process-register', [AccountController::class, 'register'])->name('account.register');
         Route::get('/login', [AccountController::class, 'login'])->name('account.login');
         Route::post('/authenticate', [AccountController::class, 'authenticate'])->name('account.authenticate');
+        Route::get('/forgot-password', [AccountController::class, 'forgotPassword'])->name('account.forgotPassword');
+        Route::post('/process-forgot-password', [AccountController::class, 'processForgotPassword'])->name('account.processForgotPassword');
+        Route::get('/reset-password/{token}', [AccountController::class, 'resetPassword'])->name('account.resetPassword');
+        Route::post('/process-reset-password', [AccountController::class, 'processResetPass'])->name('account.processResetPass');
     });
 
     Route::group(['middleware' => 'auth'], function (){
@@ -64,6 +72,8 @@ Route::group(['prefix'=> 'admin','middleware' =>'checkRole'], function (){
     Route::get('/list-job', [JobController::class, 'listJob'])->name('admin.listJob');
     Route::get('/edit-job/{id}', [JobController::class, 'editJob'])->name('admin.editJob');
     Route::post('/update-job/{id}', [JobController::class, 'updateJob'])->name('admin.updateJob');
-    Route::post('/remove-job', [JobController::class, 'removeJob'])->name('admin.removeJob');
+    Route::delete('/remove-job', [JobController::class, 'removeJob'])->name('admin.removeJob');
+
+    Route::get('/job-applications', [JobApplicationController::class, 'listJobApplications'])->name('admin.listJobApplications');
 
 });
